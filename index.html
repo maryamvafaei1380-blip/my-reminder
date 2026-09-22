@@ -200,6 +200,22 @@ body{padding:10px}
 }
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:5px}
+  /* ===== مودال خوش‌آمدگویی ===== */
+.welcome-modal{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);display:none;place-items:center;z-index:500;padding:20px}
+.welcome-modal.open{display:grid}
+.welcome-card{background:var(--card);border-radius:28px;padding:36px 26px;text-align:center;max-width:380px;width:100%;box-shadow:var(--shadow);animation:welcomePop .4s cubic-bezier(.2,.8,.3,1);position:relative;overflow:hidden}
+.welcome-card::before{content:'';position:absolute;top:-60px;right:-60px;width:180px;height:180px;background:var(--gradient);border-radius:50%;opacity:.15;pointer-events:none}
+.welcome-card::after{content:'';position:absolute;bottom:-80px;left:-80px;width:200px;height:200px;background:var(--gradient);border-radius:50%;opacity:.1;pointer-events:none}
+@keyframes welcomePop{0%{transform:scale(.85);opacity:0}100%{transform:scale(1);opacity:1}}
+.welcome-icon{font-size:56px;margin-bottom:14px;display:inline-block;animation:wave 2s ease-in-out infinite;transform-origin:70% 70%;position:relative;z-index:1}
+@keyframes wave{0%,60%,100%{transform:rotate(0)}10%{transform:rotate(14deg)}20%{transform:rotate(-8deg)}30%{transform:rotate(14deg)}40%{transform:rotate(-4deg)}50%{transform:rotate(10deg)}}
+.welcome-card h2{margin:0 0 8px;font-size:22px;font-weight:800;background:var(--gradient);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;position:relative;z-index:1}
+.welcome-card p{margin:0 0 22px;font-size:13.5px;color:var(--text-muted);position:relative;z-index:1}
+.welcome-card input{width:100%;padding:14px 18px;border-radius:14px;border:2px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;font-size:15px;outline:none;text-align:center;transition:.2s;position:relative;z-index:1;font-weight:600}
+.welcome-card input:focus{border-color:var(--primary);box-shadow:0 0 0 4px var(--primary-light)}
+.welcome-card input::placeholder{color:var(--text-muted);font-weight:400}
+.welcome-btn{width:100%;padding:14px;margin-top:16px;border-radius:14px;border:none;background:var(--gradient);color:#fff;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;transition:.2s;box-shadow:0 8px 20px -6px var(--primary);position:relative;z-index:1}
+.welcome-btn:active{transform:scale(.97)}
 </style>
 </head>
 <body>
@@ -415,7 +431,17 @@ body{padding:10px}
 </div>
 
 <div class="toast" id="toast"></div>
-
+<!-- ===== مودال خوش‌آمدگویی ===== -->
+<div class="welcome-modal" id="welcomeModal">
+  <div class="welcome-card">
+    <div class="welcome-icon">👋</div>
+    <h2>خوش اومدی!</h2>
+    <p>اسمت رو بگو تا اپ رو برات شخصی‌سازی کنم</p>
+    <input type="text" id="welcomeNameInput" placeholder="مثلاً: مریم" maxlength="20">
+    <button class="welcome-btn" id="welcomeSubmit">شروع کنیم 🚀</button>
+  </div>
+  
+</div>
 <script>
 function div(a,b){return ~~(a/b)}
 function mod(a,b){return a-~~(a/b)*b}
@@ -798,21 +824,39 @@ $('#alarmSnooze').onclick=()=>{if(alarmTask){alarmTask.due=new Date(Date.now()+1
 const NAME_KEY='reminder_username_v1';
 
 function loadUserName(){
-  let name=localStorage.getItem(NAME_KEY);
+  const name=localStorage.getItem(NAME_KEY);
   if(!name){
-    // اولین بار است - از کاربر می‌پرسیم
-    name=prompt('اسمت چیه؟ (می‌تونی بعداً از تنظیمات عوضش کنی)');
-    if(name&&name.trim()){
-      name=name.trim();
-      localStorage.setItem(NAME_KEY,name);
-    } else {
-      name='دوست من';
-    }
+    openWelcomeModal();
+  } else {
+    applyUserName(name);
   }
-  applyUserName(name);
-  return name;
 }
 
+function openWelcomeModal(){
+  const modal=$('#welcomeModal');
+  const input=$('#welcomeNameInput');
+  if(!modal||!input) return;
+  input.value='';
+  modal.classList.add('open');
+  setTimeout(()=>input.focus(),400);
+}
+
+function closeWelcomeModal(name){
+  const modal=$('#welcomeModal');
+  if(modal) modal.classList.remove('open');
+  if(name){
+    localStorage.setItem(NAME_KEY,name);
+    applyUserName(name);
+  }
+}
+
+function applyUserName(name){
+  const safeName=name&&name.trim()?name.trim():'دوست من';
+  const el=$('#userName');
+  if(el) el.textContent=`سلام، ${safeName}! 👋`;
+  const input=$('#userNameInput');
+  if(input) input.value=(name&&name.trim())?name.trim():'';
+}
 function applyUserName(name){
   const safeName=name&&name.trim()?name.trim():'دوست من';
   const el=$('#userName');
