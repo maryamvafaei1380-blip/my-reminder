@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1220">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="یادآور">
+<title>یادآور کارها</title>
+<link rel="manifest" href="manifest.json">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0b1220;--card:#141d2f;--card2:#1b2740;--line:#25324b;
+  --txt:#e9effb;--muted:#8ea1c0;--accent:#6366f1;--accent2:#8b5cf6;
+  --ok:#22c55e;--warn:#f59e0b;--danger:#ef4444;--r:16px;
+}
+[data-theme="light"]{
+  --bg:#f4f6fb;--card:#ffffff;--card2:#eef2fa;--line:#dde4f0;
+  --txt:#0f172a;--muted:#667085;
+}
+html,body{margin:0;padding:0;min-height:100%}
+body{
+  background:var(--bg);color:var(--txt);
+  font-family:'Vazirmatn',system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;
+  font-size:15px;line-height:1.7;
+  padding-bottom:calc(100px + env(safe-area-inset-bottom));
+  transition:background .25s,color .25s;
+}
+.app{max-width:640px;margin:0 auto;padding:16px}
+
+/* ===== هدر ===== */
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 4px 16px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{
+  width:46px;height:46px;border-radius:14px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  font-size:22px;color:#fff;box-shadow:0 8px 22px -8px var(--accent);
+}
+h1{font-size:19px;margin:0;font-weight:700}
+.sub{font-size:12px;color:var(--muted);margin:0}
+.icobtn{
+  width:42px;height:42px;border-radius:13px;border:1px solid var(--line);
+  background:var(--card);color:var(--txt);font-size:17px;cursor:pointer;
+  display:grid;place-items:center;transition:.15s;
+}
+.icobtn:active{transform:scale(.93)}
+
+/* ===== نوار جستجو ===== */
+.searchwrap{display:flex;gap:10px;margin-bottom:14px}
+.searchwrap input{
+  flex:1;padding:13px 16px;border-radius:14px;border:1px solid var(--line);
+  background:var(--card);color:var(--txt);font-family:inherit;font-size:14px;outline:none;
+}
+.searchwrap input:focus{border-color:var(--accent)}
+.addbtn{
+  padding:0 20px;border-radius:14px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;font-size:22px;font-weight:300;font-family:inherit;
+}
+.addbtn:active{transform:scale(.95)}
+
+/* ===== تب‌ها ===== */
+.tabs{display:flex;gap:6px;background:var(--card);padding:5px;border-radius:14px;border:1px solid var(--line);margin-bottom:16px}
+.tabs button{
+  flex:1;padding:9px 4px;border:none;background:transparent;color:var(--muted);
+  border-radius:10px;font-family:inherit;font-size:13.5px;cursor:pointer;transition:.2s;font-weight:500;
+}
+.tabs button.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 4px 12px -4px var(--accent)}
+
+/* ===== لیست کارها ===== */
+.list{display:flex;flex-direction:column;gap:10px}
+.task{
+  display:flex;align-items:flex-start;gap:12px;padding:14px;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  position:relative;overflow:hidden;animation:pop .25s ease;
+}
+@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.task::before{content:'';position:absolute;inset-inline-start:0;top:0;bottom:0;width:4px;background:var(--line)}
+.task.p-high::before{background:var(--danger)}
+.task.p-normal::before{background:var(--accent)}
+.task.p-low::before{background:var(--ok)}
+.task.done{opacity:.5}
+.task.done .ttitle{text-decoration:line-through}
+
+.check{
+  width:26px;height:26px;min-width:26px;border-radius:9px;border:2px solid var(--line);
+  background:transparent;color:#fff;cursor:pointer;display:grid;place-items:center;
+  font-size:14px;margin-top:2px;transition:.15s;padding:0;
+}
+.task.done .check{background:var(--ok);border-color:var(--ok)}
+.check:active{transform:scale(.9)}
+
+.tbody{flex:1;min-width:0;cursor:pointer}
+.ttitle{font-weight:600;font-size:15px;word-break:break-word}
+.tmeta{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--muted);margin-top:5px}
+.tmeta .overdue{color:var(--danger);font-weight:600}
+.tnote{font-size:12.5px;color:var(--muted);margin-top:6px;word-break:break-word}
+.del{
+  background:transparent;border:none;color:var(--muted);font-size:16px;cursor:pointer;
+  padding:4px 6px;border-radius:8px;opacity:.6;transition:.15s;
+}
+.del:hover{opacity:1;color:var(--danger)}
+
+/* ===== حالت خالی ===== */
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty .big{font-size:52px;margin-bottom:12px;opacity:.5}
+.empty p{margin:4px 0;font-size:14px}
+
+/* ===== دکمه شناور ===== */
+.fab{
+  position:fixed;inset-inline-end:20px;bottom:calc(24px + env(safe-area-inset-bottom));
+  width:60px;height:60px;border-radius:20px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
+  font-size:30px;font-weight:300;box-shadow:0 12px 30px -8px var(--accent);
+  display:grid;place-items:center;z-index:50;transition:.15s;
+}
+.fab:active{transform:scale(.9)}
+
+/* ===== مودال ===== */
+.modal{
+  position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
+  display:none;align-items:flex-end;justify-content:center;z-index:100;
+}
+.modal.open{display:flex}
+.sheet{
+  width:100%;max-width:640px;background:var(--card);border-radius:24px 24px 0 0;
+  padding:20px 20px calc(24px + env(safe-area-inset-bottom));
+  max-height:92vh;overflow-y:auto;animation:up .3s cubic-bezier(.2,.8,.3,1);
+}
+@keyframes up{from{transform:translateY(100%)}to{transform:none}}
+.sheet h2{margin:0 0 18px;font-size:17px;display:flex;align-items:center;gap:8px}
+.grab{width:40px;height:4px;border-radius:4px;background:var(--line);margin:0 auto 16px}
+
+label{display:block;font-size:12.5px;color:var(--muted);margin:14px 0 6px;font-weight:500}
+input[type=text],input[type=datetime-local],textarea,select{
+  width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);
+  background:var(--card2);color:var(--txt);font-family:inherit;font-size:14px;outline:none;
+}
+input:focus,textarea:focus,select:focus{border-color:var(--accent)}
+textarea{resize:vertical;min-height:64px}
+.row{display:flex;gap:10px}
+.row>div{flex:1}
+.btnrow{display:flex;gap:10px;margin-top:22px}
+.btn{
+  flex:1;padding:14px;border-radius:14px;border:none;cursor:pointer;
+  font-family:inherit;font-size:14.5px;font-weight:600;transition:.15s;
+}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+.btn-ghost{background:var(--card2);color:var(--txt);border:1px solid var(--line)}
+.btn-danger{background:rgba(239,68,68,.15);color:var(--danger)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{
+  padding:8px 14px;border-radius:11px;border:1px solid var(--line);background:var(--card2);
+  color:var(--muted);font-family:inherit;font-size:13px;cursor:pointer;transition:.15s;
+}
+.chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* ===== هشدار تمام‌صفحه ===== */
+.alarm{
+  position:fixed;inset:0;background:rgba(8,12,22,.94);backdrop-filter:blur(8px);
+  display:none;place-items:center;z-index:200;padding:24px;
+}
+.alarm.open{display:grid}
+.alarm-card{
+  background:var(--card);border:1px solid var(--line);border-radius:26px;
+  padding:32px 24px;max-width:400px;width:100%;text-align:center;
+  animation:shake .5s ease;
+}
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-8px)}40%{transform:translateX(8px)}
+  60%{transform:translateX(-5px)}80%{transform:translateX(5px)}
+}
+.bell{font-size:58px;animation:ring 1s ease infinite;display:inline-block}
+@keyframes ring{0%,100%{transform:rotate(0)}25%{transform:rotate(-14deg)}75%{transform:rotate(14deg)}}
+.alarm-card h2{margin:14px 0 6px;font-size:19px}
+.alarm-card .time{color:var(--accent);font-weight:700;font-size:15px;margin-bottom:20px}
+.alarm-card .note{color:var(--muted);font-size:13.5px;margin-bottom:20px}
+
+/* ===== توست ===== */
+.toast{
+  position:fixed;bottom:calc(100px + env(safe-area-inset-bottom));inset-inline-start:50%;
+  transform:translateX(50%) translateY(20px);opacity:0;pointer-events:none;
+  background:var(--card2);border:1px solid var(--line);color:var(--txt);
+  padding:12px 20px;border-radius:14px;font-size:13.5px;z-index:300;
+  transition:.3s;white-space:nowrap;box-shadow:0 10px 30px -10px #000;
+}
+.toast.show{opacity:1;transform:translateX(50%) translateY(0)}
+.hint{font-size:12px;color:var(--muted);line-height:1.9;background:var(--card2);padding:12px 14px;border-radius:12px;margin-top:14px}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header>
+    <div class="brand">
+      <div class="logo">✓</div>
+      <div>
+        <h1>یادآور کارها</h1>
+        <p class="sub" id="subtitle">در حال بارگذاری…</p>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="icobtn" id="btnTheme" title="تغییر تم">🌙</button>
+      <button class="icobtn" id="btnSettings" title="تنظیمات">⚙️</button>
+    </div>
+  </header>
+
+  <div class="searchwrap">
+    <input id="search" type="text" placeholder="🔍 جستجو در کارها…">
+    <button class="addbtn" id="btnQuick">+</button>
+  </div>
+
+  <nav class="tabs" id="tabs">
+    <button data-filter="today" class="active">امروز</button>
+    <button data-filter="upcoming">پیش‌رو</button>
+    <button data-filter="all">همه</button>
+    <button data-filter="done">انجام‌شده</button>
+  </nav>
+
+  <div class="list" id="list"></div>
+</div>
+
+<button class="fab" id="fab">+</button>
+
+<!-- ===== مودال افزودن/ویرایش ===== -->
+<div class="modal" id="modal">
+  <div class="sheet">
+    <div class="grab"></div>
+    <h2 id="modalTitle">➕ کار جدید</h2>
+
+    <label>عنوان کار *</label>
+    <input type="text" id="fTitle" placeholder="مثلاً: جلسه با تیم طراحی">
+
+    <label>توضیحات</label>
+    <textarea id="fNote" placeholder="جزئیات بیشتر…"></textarea>
+
+    <label>تاریخ و ساعت</label>
+    <input type="datetime-local" id="fDue">
+
+    <label>یادآوری قبل از</label>
+    <div class="chips" id="chipsRemind"></div>
+
+    <div class="row">
+      <div>
+        <label>تکرار</label>
+        <select id="fRepeat">
+          <option value="none">بدون تکرار</option>
+          <option value="daily">هر روز</option>
+          <option value="weekly">هر هفته</option>
+          <option value="monthly">هر ماه</option>
+          <option value="yearly">هر سال</option>
+        </select>
+      </div>
+      <div>
+        <label>اولویت</label>
+        <select id="fPriority">
+          <option value="high">🔴 بالا</option>
+          <option value="normal" selected>🔵 معمولی</option>
+          <option value="low">🟢 پایین</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="btnrow">
+      <button class="btn btn-primary" id="btnSave">ذخیره</button>
+      <button class="btn btn-ghost" id="btnCancel">انصراف</button>
+    </div>
+    <div class="btnrow" id="delRow" style="display:none;margin-top:10px">
+      <button class="btn btn-danger" id="btnDelete">🗑 حذف این کار</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== مودال تنظیمات ===== -->
+<div class="modal" id="setModal">
+  <div class="sheet">
+    <div class="grab"></div>
+    <h2>⚙️ تنظیمات</h2>
+
+    <label>اعلان‌ها</label>
+    <button class="btn btn-ghost" id="btnPerm" style="width:100%">🔔 فعال‌سازی اعلان</button>
+
+    <label>صدای آلارم</label>
+    <button class="btn btn-ghost" id="btnSound" style="width:100%">🔊 روشن</button>
+
+    <label>پشتیبان‌گیری</label>
+    <div class="btnrow" style="margin-top:0">
+      <button class="btn btn-ghost" id="btnExport">📤 خروجی</button>
+      <button class="btn btn-ghost" id="btnImport">📥 ورودی</button>
+    </div>
+    <input type="file" id="fileInput" accept=".json" style="display:none">
+
+    <div class="btnrow">
+      <button class="btn btn-danger" id="btnClearDone">پاک کردن انجام‌شده‌ها</button>
+    </div>
+
+    <div class="hint">
+      💡 <b>نکته مهم:</b> برای اینکه آلارم‌ها سر وقت کار کنند، این اپ را به صفحه اصلی گوشی اضافه کنید (Add to Home Screen) و اعلان‌ها را مجاز کنید.
+      <br>🔒 تمام اطلاعات فقط روی گوشی خودتان ذخیره می‌شود.
+    </div>
+
+    <div class="btnrow">
+      <button class="btn btn-primary" id="btnCloseSet">بستن</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== آلارم تمام‌صفحه ===== -->
+<div class="alarm" id="alarm">
+  <div class="alarm-card">
+    <div class="bell">🔔</div>
+    <h2 id="alarmTitle"></h2>
+    <div class="time" id="alarmTime"></div>
+    <div class="note" id="alarmNote"></div>
+    <div class="btnrow">
+      <button class="btn btn-primary" id="alarmDone">✓ انجام شد</button>
+      <button class="btn btn-ghost" id="alarmSnooze">۱۰ دقیقه بعد</button>
+    </div>
+    <div class="btnrow" style="margin-top:10px">
+      <button class="btn btn-ghost" id="alarmClose">بستن</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   یادآور کارها — اپلیکیشن مدیریت کارهای روزانه
+   ============================================================ */
+
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const KEY = 'reminder_tasks_v1';
+const SET = 'reminder_settings_v1';
+
+let tasks = [];
+let settings = { sound: true, theme: 'dark' };
+let currentFilter = 'today';
+let searchQuery = '';
+let editingId = null;
+let deferredPrompt = null;
+let alarmTask = null;
+let swReg = null;
+
+/* ---------- ابزارها ---------- */
+const uid = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2));
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad = n => String(n).padStart(2, '0');
+
+function toInputValue(d) {
+  const x = new Date(d);
+  return `${x.getFullYear()}-${pad(x.getMonth()+1)}-${pad(x.getDate())}T${pad(x.getHours())}:${pad(x.getMinutes())}`;
+}
+const fmtDate = d => new Intl.DateTimeFormat('fa-IR', { month: 'long', day: 'numeric' }).format(new Date(d));
+const fmtTime = d => new Intl.DateTimeFormat('fa-IR', { hour: '2-digit', minute: '2-digit' }).format(new Date(d));
+const fmtFull = d => new Intl.DateTimeFormat('fa-IR', { weekday:'long', month: 'long', day: 'numeric', hour:'2-digit', minute:'2-digit' }).format(new Date(d));
+
+function isSameDay(a, b) {
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+}
+
+const repeatLabel = r => ({ none:'بدون تکرار', daily:'هر روز', weekly:'هر هفته', monthly:'هر ماه', yearly:'هر سال' }[r] || '');
+const remindLabel = m => m === 0 ? 'سر وقت' : m < 60 ? `${m} دقیقه قبل` : m === 60 ? '۱ ساعت قبل' : m === 1440 ? '۱ روز قبل' : `${m} دقیقه قبل`;
+
+function nextOccurrence(date, repeat) {
+  const d = new Date(date);
+  if (repeat === 'daily')   d.setDate(d.getDate() + 1);
+  if (repeat === 'weekly')  d.setDate(d.getDate() + 7);
+  if (repeat === 'monthly') d.setMonth(d.getMonth() + 1);
+  if (repeat === 'yearly')  d.setFullYear(d.getFullYear() + 1);
+  return d;
+}
+
+function toast(msg) {
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._tm);
+  t._tm = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+/* ---------- ذخیره‌سازی ---------- */
+function load() {
+  try { tasks = JSON.parse(localStorage.getItem(KEY)) || []; } catch { tasks = []; }
+  try { settings = { ...settings, ...(JSON.parse(localStorage.getItem(SET)) || {}) }; } catch {}
+}
+function save() { localStorage.setItem(KEY, JSON.stringify(tasks)); }
+function saveSettings() { localStorage.setItem(SET, JSON.stringify(settings)); }
+
+/* ---------- صدا ---------- */
+let audioCtx = null;
+function beep(times = 3) {
+  if (!settings.sound) return;
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const t0 = audioCtx.currentTime;
+    for (let i = 0; i < times; i++) {
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(880, t0 + i * 0.5);
+      o.frequency.setValueAtTime(1180, t0 + i * 0.5 + 0.12);
+      o.connect(g); g.connect(audioCtx.destination);
+      const s = t0 + i * 0.5;
+      g.gain.setValueAtTime(0, s);
+      g.gain.linearRampToValueAtTime(0.32, s + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.001, s + 0.4);
+      o.start(s); o.stop(s + 0.42);
+    }
+  } catch (e) { /* بی‌صدا */ }
+}
+
+/* ---------- اعلان ---------- */
+async function requestPermission() {
+  if (!('Notification' in window)) { toast('مرورگر شما از اعلان پشتیبانی نمی‌کند'); return false; }
+  if (Notification.permission === 'granted') { toast('اعلان‌ها فعال است ✓'); return true; }
+  const p = await Notification.requestPermission();
+  if (p === 'granted') { toast('اعلان‌ها فعال شد ✓'); return true; }
+  toast('اعلان‌ها رد شد — از تنظیمات مرورگر اجازه بدهید');
+  return false;
+}
+
+async function pushNotification(title, body, tag) {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  const opts = {
+    body, tag, dir: 'rtl', lang: 'fa',
+    requireInteraction: true,
+    vibrate: [250, 120, 250, 120, 450],
+  };
+  try {
+    const reg = swReg || (navigator.serviceWorker && await navigator.serviceWorker.getRegistration());
+    if (reg && reg.showNotification) { await reg.showNotification(title, opts); return; }
+  } catch (e) {}
+  try { new Notification(title, opts); } catch (e) {}
+}
+
+/* ---------- بررسی یادآوری‌ها ---------- */
+function checkReminders() {
+  const now = Date.now();
+  let changed = false;
+
+  tasks.forEach(t => {
+    if (t.done) return;
+
+    // اسنوز
+    if (t.snoozeUntil) {
+      if (now >= t.snoozeUntil) {
+        delete t.snoozeUntil;
+        t.notified = true;
+        triggerAlarm(t);
+        changed = true;
+      }
+      return;
+    }
+
+    if (t.notified) return;
+
+    const due = new Date(t.due).getTime();
+    const remindAt = due - (t.remindBefore || 0) * 60000;
+
+    // فقط اگر در ۶۰ دقیقه اخیر زمان یادآوری گذشته باشد
+    if (now >= remindAt && now - remindAt < 60 * 60000) {
+      t.notified = true;
+      triggerAlarm(t);
+      changed = true;
+    }
+  });
+
+  if (changed) { save(); render(); updateSubtitle(); }
+}
+
+function triggerAlarm(task) {
+  alarmTask = task;
+  beep(4);
+  if (navigator.vibrate) navigator.vibrate([250, 120, 250, 120, 450]);
+
+  pushNotification('⏰ ' + task.title, task.note || 'زمان انجام این کار رسیده است', task.id);
+
+  // اگر اپ باز است، هشدار تمام‌صفحه نشان بده
+  if (document.visibilityState === 'visible') {
+    $('#alarmTitle').textContent = task.title;
+    $('#alarmNote').textContent = task.note || '';
+    $('#alarmTime').textContent = '🕐 ' + fmtFull(task.due);
+    $('#alarm').classList.add('open');
+  }
+}
+
+/* ---------- رندر ---------- */
+function updateSubtitle() {
+  const today = tasks.filter(t => !t.done && isSameDay(new Date(t.due), new Date()));
+  const overdue = tasks.filter(t => !t.done && new Date(t.due) < new Date() && !isSameDay(new Date(t.due), new Date()));
+  const parts = [];
+  if (today.length) parts.push(`${today.length} کار برای امروز`);
+  if (overdue.length) parts.push(`${overdue.length} عقب‌افتاده`);
+  $('#subtitle').textContent = parts.length ? parts.join(' • ') : 'همه‌چیز مرتب است ✨';
+}
+
+function render() {
+  const q = searchQuery.trim().toLowerCase();
+  const endOfToday = new Date(); endOfToday.setHours(23, 59, 59, 999);
+
+  let list = tasks.filter(t => {
+    if (q && !(t.title.toLowerCase().includes(q) || (t.note || '').toLowerCase().includes(q))) return false;
+    const due = new Date(t.due);
+    if (currentFilter === 'today')    return !t.done && due <= endOfToday;
+    if (currentFilter === 'upcoming') return !t.done && due > endOfToday;
+    if (currentFilter === 'all')      return !t.done;
+    if (currentFilter === 'done')     return t.done;
+    return true;
+  });
+
+  list.sort((a, b) => currentFilter === 'done'
+    ? new Date(b.due) - new Date(a.due)
+    : new Date(a.due) - new Date(b.due));
+
+  const el = $('#list');
+
+  if (!list.length) {
+    const msgs = {
+      today:    ['🎉', 'امروز کاری نداری', 'از وقتت لذت ببر!'],
+      upcoming: ['📅', 'کاری برای آینده ثبت نشده', 'با دکمه + یک کار جدید بساز'],
+      all:      ['✨', 'همه کارها انجام شده', 'آفرین!'],
+      done:     ['📦', 'هنوز کاری انجام نشده', 'کارها را تیک بزن تا اینجا بیایند'],
+    }[currentFilter];
+    el.innerHTML = `<div class="empty"><div class="big">${msgs[0]}</div><p><b>${msgs[1]}</b></p><p>${msgs[2]}</p></div>`;
+    updateSubtitle();
+    return;
+  }
+
+  el.innerHTML = list.map(t => {
+    const due = new Date(t.due);
+    const now = Date.now();
+    const overdue = !t.done && due.getTime() < now;
+    const isToday = isSameDay(due, new Date());
+    const isTomorrow = isSameDay(due, new Date(now + 86400000));
+    const dateStr = isToday ? 'امروز' : isTomorrow ? 'فردا' : fmtDate(due);
+
+    return `
+      <div class="task p-${t.priority || 'normal'} ${t.done ? 'done' : ''}" data-id="${t.id}">
+        <button class="check" data-act="toggle">${t.done ? '✓' : ''}</button>
+        <div class="tbody" data-act="edit">
+          <div class="ttitle">${esc(t.title)}</div>
+          <div class="tmeta">
+            <span class="${overdue ? 'overdue' : ''}">🕐 ${dateStr} • ${fmtTime(due)}${overdue ? ' (عقب‌افتاده)' : ''}</span>
+            ${t.repeat && t.repeat !== 'none' ? `<span>🔁 ${repeatLabel(t.repeat)}</span>` : ''}
+            ${(t.remindBefore || 0) >= 0 ? `<span>🔔 ${remindLabel(t.remindBefore || 0)}</span>` : ''}
+          </div>
+          ${t.note ? `<div class="tnote">${esc(t.note)}</div>` : ''}
+        </div>
+        <button class="del" data-act="del">🗑</button>
+      </div>`;
+  }).join('');
+
+  updateSubtitle();
+}
+
+/* ---------- عملیات کارها ---------- */
+function toggleTask(id) {
+  const t = tasks.find(x => x.id === id);
+  if (!t) return;
+
+  if (!t.done) {
+    t.done = true;
+    t.doneAt = new Date().toISOString();
+
+    // اگر تکرار دارد، نمونه بعدی را بساز
+    if (t.repeat && t.repeat !== 'none') {
+      const nd = nextOccurrence(t.due, t.repeat);
+      tasks.push({
+        ...t,
+        id: uid(),
+        due: nd.toISOString(),
+        done: false,
+        doneAt: null,
+        notified: false,
+        snoozeUntil: null,
+        createdAt: new Date().toISOString(),
+      });
+      toast('✓ انجام شد — نمونه بعدی ساخته شد');
+    } else {
+      toast('✓ انجام شد');
+    }
+  } else {
+    t.done = false;
+    t.doneAt = null;
+    t.notified = false;
+  }
+  save(); render();
+}
+
+function deleteTask(id) {
+  tasks = tasks.filter(t => t.id !== id);
+  save(); render();
+  toast('کار حذف شد');
+}
+
+/* ---------- مودال ---------- */
+const REMIND_OPTIONS = [
+  { v: 0,    l: 'سر وقت' },
+  { v: 5,    l: '۵ دقیقه' },
+  { v: 10,   l: '۱۰ دقیقه' },
+  { v: 15,   l: '۱۵ دقیقه' },
+  { v: 30,   l: '۳۰ دقیقه' },
+  { v: 60,   l: '۱ ساعت' },
+  { v: 120,  l: '۲ ساعت' },
+  { v: 1440, l: '۱ روز' },
+];
+let selectedRemind = 10;
+
+function buildChips() {
+  $('#chipsRemind').innerHTML = REMIND_OPTIONS.map(o =>
+    `<button class="chip ${o.v === selectedRemind ? 'active' : ''}" data-v="${o.v}">${o.l}</button>`
+  ).join('');
+}
+$('#chipsRemind').addEventListener('click', e => {
+  const b = e.target.closest('.chip');
+  if (!b) return;
+  selectedRemind = +b.dataset.v;
+  buildChips();
+});
+
+function openModal(task = null) {
+  editingId = task ? task.id : null;
+  $('#modalTitle').textContent = task ? '✏️ ویرایش کار' : '➕ کار جدید';
+  $('#fTitle').value = task ? task.title : '';
+  $('#fNote').value = task ? (task.note || '') : '';
+  $('#fRepeat').value = task ? (task.repeat || 'none') : 'none';
+  $('#fPriority').value = task ? (task.priority || 'normal') : 'normal';
+  selectedRemind = task ? (task.remindBefore ?? 10) : 10;
+  buildChips();
+
+  // پیش‌فرض: یک ساعت بعد
+  const defaultDue = new Date(Date.now() + 60 * 60000);
+  defaultDue.setMinutes(Math.ceil(defaultDue.getMinutes() / 5) * 5, 0, 0);
+  $('#fDue').value = toInputValue(task ? task.due : defaultDue);
+
+  $('#delRow').style.display = task ? 'flex' : 'none';
+  $('#modal').classList.add('open');
+  setTimeout(() => $('#fTitle').focus(), 250);
+}
+
+function closeModal() {
+  $('#modal').classList.remove('open');
+  editingId = null;
+}
+
+$('#btnSave').onclick = () => {
+  const title = $('#fTitle').value.trim();
+  if (!title) { toast('عنوان کار را وارد کنید'); $('#fTitle').focus(); return; }
+
+  const dueVal = $('#fDue').value;
+  if (!dueVal) { toast('تاریخ و ساعت را انتخاب کنید'); return; }
+  const due = new Date(dueVal);
+  if (isNaN(due)) { toast('تاریخ نامعتبر است'); return; }
+
+  const data = {
+    title,
+    note: $('#fNote').value.trim(),
+    due: due.toISOString(),
+    remindBefore: selectedRemind,
+    repeat: $('#fRepeat').value,
+    priority: $('#fPriority').value,
+  };
+
+  if (editingId) {
+    const t = tasks.find(x => x.id === editingId);
+    Object.assign(t, data);
+    t.notified = false;
+    delete t.snoozeUntil;
+    toast('تغییرات ذخیره شد ✓');
+  } else {
+    tasks.push({
+      id: uid(),
+      ...data,
+      done: false,
+      notified: false,
+      createdAt: new Date().toISOString(),
+    });
+    toast('کار جدید اضافه شد ✓');
+  }
+
+  save(); closeModal(); render();
+  // درخواست مجوز اعلان در اولین ذخیره
+  if ('Notification' in window && Notification.permission === 'default') requestPermission();
+};
+
+$('#btnCancel').onclick = closeModal;
+$('#btnDelete').onclick = () => {
+  if (!editingId) return;
+  if (confirm('این کار حذف شود؟')) { deleteTask(editingId); closeModal(); }
+};
+$('#modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
+
+/* ---------- رویدادهای لیست ---------- */
+$('#list').addEventListener('click', e => {
+  const taskEl = e.target.closest('.task');
+  if (!taskEl) return;
+  const id = taskEl.dataset.id;
+  const act = e.target.closest('[data-act]')?.dataset.act;
+
+  if (act === 'toggle') { toggleTask(id); return; }
+  if (act === 'del')    { if (confirm('این کار حذف شود؟')) deleteTask(id); return; }
+  if (act === 'edit')   { openModal(tasks.find(t => t.id === id)); return; }
+});
+
+/* ---------- تب‌ها و جستجو ---------- */
+$('#tabs').addEventListener('click', e => {
+  const b = e.target.closest('button[data-filter]');
+  if (!b) return;
+  currentFilter = b.dataset.filter;
+  $$('#tabs button').forEach(x => x.classList.toggle('active', x === b));
+  render();
+});
+
+let searchTimer;
+$('#search').addEventListener('input', e => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => { searchQuery = e.target.value; render(); }, 180);
+});
+
+/* ---------- دکمه‌ها ---------- */
+$('#fab').onclick = () => openModal();
+$('#btnQuick').onclick = () => openModal();
+
+/* ---------- تنظیمات ---------- */
+$('#btnSettings').onclick = () => {
+  $('#btnSound').textContent = settings.sound ? '🔊 روشن' : '🔇 خاموش';
+  if ('Notification' in window) {
+    const p = Notification.permission;
+    $('#btnPerm').textContent = p === 'granted' ? '✅ اعلان‌ها فعال است' : p === 'denied' ? '🚫 اعلان‌ها مسدود شده' : '🔔 فعال‌سازی اعلان';
+  }
+  $('#setModal').classList.add('open');
+};
+$('#btnCloseSet').onclick = () => $('#setModal').classList.remove('open');
+$('#setModal').addEventListener('click', e => { if (e.target.id === 'setModal') $('#setModal').classList.remove('open'); });
+
+$('#btnPerm').onclick = async () => {
+  const ok = await requestPermission();
+  if (ok) {
+    $('#btnPerm').textContent = '✅ اعلان‌ها فعال است';
+    pushNotification('🔔 اعلان‌ها فعال شد', 'از این پس یادآوری‌ها را دریافت می‌کنید', 'test');
+  }
+};
+
+$('#btnSound').onclick = () => {
+  settings.sound = !settings.sound;
+  saveSettings();
+  $('#btnSound').textContent = settings.sound ? '🔊 روشن' : '🔇 خاموش';
+  if (settings.sound) beep(2);
+};
+
+$('#btnExport').onclick = () => {
+  const blob = new Blob([JSON.stringify(tasks, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `tasks-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  toast('فایل پشتیبان دانلود شد');
+};
+
+$('#btnImport').onclick = () => $('#fileInput').click();
+$('#fileInput').onchange = e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const data = JSON.parse(r.result);
+      if (!Array.isArray(data)) throw 0;
+      if (confirm(`${data.length} کار پیدا شد. به کارهای فعلی اضافه شود؟`)) {
+        tasks = tasks.concat(data.map(t => ({ ...t, id: t.id || uid() })));
+        save(); render();
+        toast('ورود اطلاعات انجام شد ✓');
+      }
+    } catch { toast('فایل نامعتبر است'); }
+  };
+  r.readAsText(f);
+  e.target.value = '';
+};
+
+$('#btnClearDone').onclick = () => {
+  const n = tasks.filter(t => t.done).length;
+  if (!n) { toast('کاری برای پاک کردن نیست'); return; }
+  if (confirm(`${n} کار انجام‌شده پاک شود؟`)) {
+    tasks = tasks.filter(t => !t.done);
+    save(); render();
+    toast('پاک شد');
+  }
+};
+
+/* ---------- تم ---------- */
+function applyTheme() {
+  document.documentElement.setAttribute('data-theme', settings.theme);
+  $('#btnTheme').textContent = settings.theme === 'dark' ? '🌙' : '☀️';
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.content = settings.theme === 'dark' ? '#0b1220' : '#f4f6fb';
+}
+$('#btnTheme').onclick = () => {
+  settings.theme = settings.theme === 'dark' ? 'light' : 'dark';
+  saveSettings(); applyTheme();
+};
+
+/* ---------- آلارم ---------- */
+$('#alarmClose').onclick = () => { $('#alarm').classList.remove('open'); alarmTask = null; };
+$('#alarmDone').onclick = () => {
+  if (alarmTask) toggleTask(alarmTask.id);
+  $('#alarm').classList.remove('open');
+  alarmTask = null;
+};
+$('#alarmSnooze').onclick = () => {
+  if (alarmTask) {
+    alarmTask.snoozeUntil = Date.now() + 10 * 60000;
+    alarmTask.notified = false;
+    save();
+    toast('۱۰ دقیقه دیگر یادآوری می‌شود');
+  }
+  $('#alarm').classList.remove('open');
+  alarmTask = null;
+};
+
+/* ---------- نصب PWA ---------- */
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+});
+
+/* ---------- راه‌اندازی ---------- */
+async function init() {
+  load();
+  applyTheme();
+  render();
+
+  // ثبت Service Worker
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    try {
+      swReg = await navigator.serviceWorker.register('sw.js');
+    } catch (e) { console.warn('SW ثبت نشد:', e); }
+  }
+
+  // بررسی دوره‌ای یادآوری‌ها
+  setInterval(checkReminders, 10000);
+  checkReminders();
+
+  // وقتی اپ به foreground برگشت
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      checkReminders();
+      render();
+    }
+  });
+
+  // وقتی پنجره فوکوس گرفت
+  window.addEventListener('focus', () => { checkReminders(); render(); });
+
+  // جلوگیری از بسته شدن ناگهانی در اندروید (توصیه)
+  console.log('%c⏰ یادآور کارها آماده است', 'color:#6366f1;font-weight:bold;font-size:14px');
+}
+
+init();
+</script>
+</body>
+</html>
