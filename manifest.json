@@ -1,18 +1,39 @@
 {
-  "name": "یادآور کارها",
+  "name": "یادآور هوشمند",
   "short_name": "یادآور",
+  "description": "اپلیکیشن مدیریت کارهای روزانه با قابلیت یادآوری، آلارم و تقویم شمسی",
+  "id": "com.maryam.reminder",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0b1220",
-  "theme_color": "#6366f1",
+  "orientation": "portrait",
+  "background_color": "#fdf2f8",
+  "theme_color": "#ec4899",
   "dir": "rtl",
   "lang": "fa",
   "icons": [
     {
-      "src": "icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "src": "android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
