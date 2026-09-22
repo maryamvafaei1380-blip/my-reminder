@@ -208,7 +208,7 @@ body{padding:10px}
   <div class="user-info">
     <div class="avatar">👩‍💻</div>
     <div>
-      <div class="user-name">سلام، مریم!</div>
+     <div class="user-name" id="userName">سلام!</div>
       <div class="user-date" id="todayDate">در حال بارگذاری...</div>
     </div>
   </div>
@@ -335,6 +335,8 @@ body{padding:10px}
 <div class="modal" id="settingsModal">
   <div class="sheet">
     <h3>⚙️ تنظیمات</h3>
+    <label>اسم شما</label>
+<input type="text" id="userNameInput" placeholder="اسمت رو بنویس...">
     <label>حالت نمایش</label>
     <div class="mode-toggle">
       <button class="mode-btn active" data-mode="light">☀️ روز</button>
@@ -792,7 +794,47 @@ $('#btnDeleteEdit').onclick=()=>{if(confirm('این کار حذف شود؟')){de
 
 $('#alarmDone').onclick=()=>{if(alarmTask)toggleTask(alarmTask.id);$('#alarmOverlay').classList.remove('open');alarmTask=null};
 $('#alarmSnooze').onclick=()=>{if(alarmTask){alarmTask.due=new Date(Date.now()+10*60000).toISOString();alarmTask.notified=false;save();render();toast('۱۰ دقیقه دیگر یادآوری می‌شود')}$('#alarmOverlay').classList.remove('open');alarmTask=null};
+/* ===== اسم کاربر ===== */
+const NAME_KEY='reminder_username_v1';
 
+function loadUserName(){
+  let name=localStorage.getItem(NAME_KEY);
+  if(!name){
+    // اولین بار است - از کاربر می‌پرسیم
+    name=prompt('اسمت چیه؟ (می‌تونی بعداً از تنظیمات عوضش کنی)');
+    if(name&&name.trim()){
+      name=name.trim();
+      localStorage.setItem(NAME_KEY,name);
+    } else {
+      name='دوست من';
+    }
+  }
+  applyUserName(name);
+  return name;
+}
+
+function applyUserName(name){
+  const safeName=name&&name.trim()?name.trim():'دوست من';
+  const el=$('#userName');
+  if(el) el.textContent=`سلام، ${safeName}!`;
+  const input=$('#userNameInput');
+  if(input) input.value=(name&&name.trim())?name.trim():'';
+}
+
+// تغییر اسم از تنظیمات
+document.addEventListener('DOMContentLoaded',()=>{
+  const input=$('#userNameInput');
+  if(input){
+    input.addEventListener('change',e=>{
+      const newName=e.target.value.trim();
+      if(newName){
+        localStorage.setItem(NAME_KEY,newName);
+        applyUserName(newName);
+        toast('اسم ذخیره شد ✓');
+      }
+    });
+  }
+});
 async function init(){
   load();
   document.documentElement.setAttribute('data-theme',settings.theme);
@@ -807,7 +849,8 @@ async function init(){
   const j=toJalali(now);
   const wd=J_WEEK_FULL[(now.getDay()+6)%7];
   $('#todayDate').textContent=`${wd} ${toFa(j.jd)} ${J_MONTHS[j.jm-1]} ${toFa(j.jy)}`;
-
+loadUserName();
+  
   render();
 
   if('serviceWorker'in navigator&&location.protocol!=='file:'){try{swReg=await navigator.serviceWorker.register('sw.js')}catch(e){}}
