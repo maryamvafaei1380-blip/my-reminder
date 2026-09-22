@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl" data-theme="pink">
+<html lang="fa" dir="rtl" data-theme="pink" data-mode="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -10,16 +10,30 @@
 <title>یادآور هوشمند</title>
 <link rel="manifest" href="manifest.json">
 <style>
-:root{--primary:#ec4899;--primary-light:#fbcfe8;--primary-dark:#be185d;--bg:#fdf2f8;--card:#fff;--text:#1e293b;--text-muted:#64748b;--border:#f1f5f9;--shadow:0 4px 20px -2px rgba(236,72,153,.15);--gradient:linear-gradient(135deg,#ec4899,#a855f7);--success:#10b981;--danger:#ef4444}
+/* ===== تم‌های رنگی ===== */
+[data-theme="pink"]{--primary:#ec4899;--primary-light:#fbcfe8;--primary-dark:#be185d;--bg:#fdf2f8;--gradient:linear-gradient(135deg,#ec4899,#a855f7);--shadow:0 4px 20px -2px rgba(236,72,153,.15)}
 [data-theme="green"]{--primary:#10b981;--primary-light:#a7f3d0;--primary-dark:#047857;--bg:#ecfdf5;--gradient:linear-gradient(135deg,#10b981,#3b82f6);--shadow:0 4px 20px -2px rgba(16,185,129,.15)}
 [data-theme="darkblue"]{--primary:#3b82f6;--primary-light:#bfdbfe;--primary-dark:#1d4ed8;--bg:#eff6ff;--gradient:linear-gradient(135deg,#3b82f6,#6366f1);--shadow:0 4px 20px -2px rgba(59,130,246,.15)}
 [data-theme="colorful"]{--primary:#8b5cf6;--primary-light:#ddd6fe;--primary-dark:#6d28d9;--bg:#faf5ff;--gradient:linear-gradient(135deg,#ec4899,#8b5cf6,#3b82f6);--shadow:0 4px 20px -2px rgba(139,92,246,.15)}
 [data-theme="orange"]{--primary:#f97316;--primary-light:#fed7aa;--primary-dark:#c2410c;--bg:#fff7ed;--gradient:linear-gradient(135deg,#f97316,#ef4444);--shadow:0 4px 20px -2px rgba(249,115,22,.15)}
+
+/* ===== متغیرهای عمومی ===== */
+:root{
+  --card:#fff;--text:#1e293b;--text-muted:#64748b;--border:#f1f5f9;
+  --success:#10b981;--danger:#ef4444;
+}
+/* ===== حالت شبانه (بعد از تم‌ها قرار می‌گیرد تا اولویت داشته باشد) ===== */
+[data-mode="dark"]{
+  --card:#1e293b;--text:#f1f5f9;--text-muted:#94a3b8;--border:#334155;
+  --bg:#0f172a;--shadow:0 4px 20px -2px rgba(0,0,0,.4);
+}
+
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{font-size:16px;-webkit-text-size-adjust:100%}
-body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'Vazirmatn',system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;font-size:14px;line-height:1.6;transition:background .3s;padding-bottom:90px;overflow-x:hidden}
-.app{max-width:900px;margin:0 auto;padding:14px}
-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:10px}
+body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'Vazirmatn',system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;font-size:14px;line-height:1.6;transition:background .3s,color .3s;overflow-x:hidden;padding:14px 14px calc(24px + env(safe-area-inset-bottom))}
+
+/* ===== هدر ===== */
+header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:10px;max-width:900px;margin-inline:auto}
 .user-info{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
 .avatar{width:42px;height:42px;min-width:42px;border-radius:14px;background:var(--gradient);display:grid;place-items:center;color:#fff;font-size:18px;flex-shrink:0}
 .user-name{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -27,23 +41,62 @@ header{display:flex;justify-content:space-between;align-items:center;margin-bott
 .header-actions{display:flex;gap:6px;flex-shrink:0}
 .icon-btn{width:38px;height:38px;border-radius:12px;border:none;background:var(--card);color:var(--text);font-size:16px;cursor:pointer;display:grid;place-items:center;box-shadow:var(--shadow);transition:.2s;padding:0}
 .icon-btn:active{transform:scale(.9)}
-.banner{background:var(--gradient);border-radius:20px;padding:18px;color:#fff;margin-bottom:14px;box-shadow:var(--shadow);overflow:hidden;position:relative}
-.banner::before{content:'';position:absolute;top:-50%;right:-20%;width:200px;height:200px;background:rgba(255,255,255,.1);border-radius:50%}
-.banner h2{margin:0 0 14px;font-size:16px;position:relative;z-index:1}
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;position:relative;z-index:1}
-.stat-box{background:rgba(255,255,255,.2);backdrop-filter:blur(10px);border-radius:12px;padding:10px 4px;text-align:center;min-width:0}
-.stat-box .num{font-size:18px;font-weight:800;display:block;line-height:1.2}
-.stat-box .lbl{font-size:10px;opacity:.95;display:block;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.main-grid{display:grid;grid-template-columns:1fr 1.5fr;gap:14px}
-.card{background:var(--card);border-radius:18px;padding:14px;box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden}
+
+/* ===== گرید اصلی با CSS Areas ===== */
+.main-grid{
+  display:grid;max-width:900px;margin:0 auto;
+  grid-template-columns:1.3fr 1fr;
+  grid-template-areas:
+    "tasks banner"
+    "tasks calendar"
+    "tasks habits"
+    "tasks reminders";
+  gap:14px;align-items:start;
+}
+.area-banner{grid-area:banner}
+.area-tasks{grid-area:tasks}
+.area-calendar{grid-area:calendar}
+.area-habits{grid-area:habits}
+.area-reminders{grid-area:reminders}
+
+/* ===== بنر ===== */
+.banner{background:var(--gradient);border-radius:20px;padding:16px;color:#fff;box-shadow:var(--shadow);overflow:hidden;position:relative}
+.banner::before{content:'';position:absolute;top:-50%;right:-20%;width:200px;height:200px;background:rgba(255,255,255,.1);border-radius:50%;pointer-events:none}
+.banner h2{margin:0 0 12px;font-size:14px;position:relative;z-index:1}
+.banner-content{display:flex;align-items:center;gap:14px;position:relative;z-index:1}
+.donut-wrap{position:relative;width:82px;height:82px;flex-shrink:0}
+.donut{width:100%;height:100%;transform:rotate(-90deg);display:block}
+.donut-bg{fill:none;stroke:rgba(255,255,255,.25);stroke-width:9}
+.donut-fg{fill:none;stroke:#fff;stroke-width:9;stroke-linecap:round;transition:stroke-dasharray .6s ease}
+.donut-label{position:absolute;inset:0;display:grid;place-items:center}
+.donut-num{font-size:15px;font-weight:800;color:#fff;line-height:1}
+.banner-stats{display:flex;gap:6px;flex:1;min-width:0}
+.bs-item{flex:1;background:rgba(255,255,255,.2);backdrop-filter:blur(8px);border-radius:11px;padding:8px 4px;text-align:center;min-width:0}
+.bs-num{font-size:16px;font-weight:800;display:block;line-height:1.2}
+.bs-lbl{font-size:9px;opacity:.95;display:block;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ===== کارت‌ها ===== */
+.card{background:var(--card);border-radius:18px;padding:14px;box-shadow:var(--shadow);overflow:hidden}
 .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px;flex-wrap:wrap}
 .card-title{font-weight:700;font-size:14px;display:flex;align-items:center;gap:6px;min-width:0}
+
+/* ===== تقویم ===== */
 .calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
 .calendar-grid .day-name{font-size:10px;color:var(--text-muted);padding:3px 0;font-weight:600}
-.calendar-grid .day{padding:6px 0;border-radius:8px;font-size:12px;cursor:pointer;transition:.2s;display:grid;place-items:center;aspect-ratio:1}
+.calendar-grid .day{
+  padding:6px 0;border-radius:8px;font-size:12px;cursor:pointer;transition:.2s;
+  display:grid;place-items:center;aspect-ratio:1;position:relative;user-select:none;
+}
 .calendar-grid .day:hover{background:var(--primary-light)}
+.calendar-grid .day.has-tasks{background:var(--primary-light);color:var(--primary-dark);font-weight:700}
 .calendar-grid .day.today{background:var(--primary);color:#fff;font-weight:700}
-.calendar-grid .day.empty{color:var(--border)}
+.calendar-grid .day.today.has-tasks{background:var(--primary);color:#fff}
+.calendar-grid .day.empty{color:transparent;cursor:default}
+.calendar-grid .day.empty:hover{background:transparent}
+.day-dot{position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--primary)}
+.calendar-grid .day.today .day-dot{background:#fff}
+
+/* ===== عادت‌ها ===== */
 .habits-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .habit{background:var(--bg);border-radius:14px;padding:12px 6px;text-align:center;cursor:pointer;transition:.2s;border:2px solid transparent;min-width:0}
 .habit.done{border-color:var(--primary);background:var(--primary-light)}
@@ -51,6 +104,8 @@ header{display:flex;justify-content:space-between;align-items:center;margin-bott
 .habit-name{font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .habit-status{font-size:9px;color:var(--text-muted);margin-top:3px}
 .habit.done .habit-status{color:var(--primary-dark)}
+
+/* ===== فرم تسک ===== */
 .task-form{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
 .form-row{display:flex;gap:6px;flex-wrap:wrap}
 .form-row input,.form-row select{padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;font-size:13px;outline:none;min-width:0}
@@ -62,10 +117,14 @@ header{display:flex;justify-content:space-between;align-items:center;margin-bott
 .date-input .placeholder{color:var(--text-muted)}
 .add-btn{padding:10px 18px;border-radius:10px;border:none;background:var(--gradient);color:#fff;font-family:inherit;font-size:18px;cursor:pointer;font-weight:300;flex-shrink:0}
 .add-btn:active{transform:scale(.95)}
+
+/* ===== فیلتر ===== */
 .filter-chips{display:flex;gap:5px;margin-bottom:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
 .filter-chips::-webkit-scrollbar{display:none}
 .chip{padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--text-muted);font-family:inherit;font-size:11px;cursor:pointer;white-space:nowrap;transition:.2s;flex-shrink:0}
 .chip.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+/* ===== لیست کارها ===== */
 .task-list{display:flex;flex-direction:column;gap:8px}
 .task-item{display:flex;align-items:flex-start;gap:10px;padding:12px;background:var(--bg);border-radius:14px;transition:.2s;border-right:4px solid var(--primary)}
 .task-item.done{opacity:.55}
@@ -79,13 +138,16 @@ header{display:flex;justify-content:space-between;align-items:center;margin-bott
 .task-meta{display:flex;flex-wrap:wrap;gap:5px;font-size:10px;color:var(--text-muted);margin-top:4px;align-items:center}
 .task-cat{background:var(--primary-light);color:var(--primary-dark);padding:2px 7px;border-radius:5px;font-size:9px;font-weight:600}
 .task-del{background:transparent;border:none;color:var(--text-muted);cursor:pointer;font-size:14px;padding:2px 4px;flex-shrink:0}
+
+/* ===== یادآورها ===== */
 .reminder-item{display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg);border-radius:12px;margin-bottom:6px}
+.reminder-item:last-child{margin-bottom:0}
 .reminder-icon{font-size:18px;flex-shrink:0}
 .reminder-info{flex:1;min-width:0}
 .reminder-title{font-weight:600;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .reminder-time{font-size:10px;color:var(--text-muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.fab{position:fixed;bottom:20px;left:20px;width:54px;height:54px;border-radius:18px;border:none;background:var(--gradient);color:#fff;font-size:26px;cursor:pointer;box-shadow:0 8px 24px -4px var(--primary);z-index:50;display:grid;place-items:center;padding:0}
-.fab:active{transform:scale(.9)}
+
+/* ===== مودال ===== */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center;z-index:100}
 .modal.open{display:flex}
 .sheet{width:100%;max-width:600px;background:var(--card);border-radius:22px 22px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));max-height:92vh;overflow-y:auto;animation:up .3s}
@@ -100,12 +162,19 @@ header{display:flex;justify-content:space-between;align-items:center;margin-bott
 .btn-primary{background:var(--gradient);color:#fff}
 .btn-ghost{background:var(--bg);color:var(--text);border:1px solid var(--border)}
 .btn-danger{background:rgba(239,68,68,.1);color:var(--danger)}
+
+/* ===== تنظیمات ===== */
 .theme-picker{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
 .theme-dot{width:36px;height:36px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:.2s}
 .theme-dot.active{border-color:var(--text)}
 .sound-option{display:flex;align-items:center;gap:8px;padding:10px;border-radius:11px;background:var(--bg);margin-bottom:6px;cursor:pointer;border:2px solid transparent;font-size:13px}
 .sound-option.active{border-color:var(--primary)}
 .volume-slider{width:100%;margin-top:6px;accent-color:var(--primary)}
+.mode-toggle{display:flex;gap:8px;margin-top:6px}
+.mode-btn{flex:1;padding:12px;border-radius:12px;border:2px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;font-size:13px;cursor:pointer;font-weight:600;transition:.2s}
+.mode-btn.active{border-color:var(--primary);background:var(--primary-light);color:var(--primary-dark)}
+
+/* ===== انتخابگر تاریخ شمسی ===== */
 .picker-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
 .picker-header button{background:var(--bg);border:none;width:36px;height:36px;border-radius:10px;cursor:pointer;color:var(--text);font-size:16px}
 .picker-title{font-weight:700;font-size:14px}
@@ -119,6 +188,8 @@ header{display:flex;justify-content:space-between;align-items:center;margin-bott
 .time-row{display:flex;gap:10px;align-items:center;justify-content:center;margin-bottom:14px}
 .time-row select{padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:inherit;font-size:14px;width:75px;text-align:center}
 .time-row span{font-weight:700;font-size:18px}
+
+/* ===== آلارم ===== */
 .alarm-overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);display:none;place-items:center;z-index:200;padding:20px}
 .alarm-overlay.open{display:grid}
 .alarm-box{background:var(--card);border-radius:24px;padding:28px 22px;text-align:center;max-width:380px;width:100%;animation:shake .5s}
@@ -127,50 +198,56 @@ header{display:flex;justify-content:space-between;align-items:center;margin-bott
 @keyframes ring{0%,100%{transform:rotate(0)}25%{transform:rotate(-15deg)}75%{transform:rotate(15deg)}}
 .alarm-box h2{margin:14px 0 8px;font-size:18px}
 .alarm-box .alarm-time{color:var(--primary);font-weight:700;margin-bottom:18px;font-size:13px}
-.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--text);color:#fff;padding:11px 20px;border-radius:12px;font-size:12.5px;z-index:300;transition:.3s;white-space:nowrap;max-width:90%}
+
+/* ===== توست ===== */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--text);color:var(--card);padding:11px 20px;border-radius:12px;font-size:12.5px;z-index:300;transition:.3s;white-space:nowrap;max-width:90%}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ===== ریسپانسیو ===== */
 @media (max-width:768px){
-.main-grid{grid-template-columns:1fr;gap:0}
-.app{padding:12px}
-.banner{padding:16px;border-radius:18px}
-.banner h2{font-size:15px;margin-bottom:12px}
-.stats-grid{gap:6px}
-.stat-box{padding:8px 2px;border-radius:10px}
-.stat-box .num{font-size:16px}
-.stat-box .lbl{font-size:9px}
-.card{padding:12px;border-radius:16px;margin-bottom:12px}
-.card-title{font-size:13px}
-.calendar-grid .day{font-size:11px;padding:5px 0}
-.habits-grid{gap:6px}
-.habit{padding:10px 4px;border-radius:12px}
-.habit-icon{font-size:20px}
-.habit-name{font-size:10.5px}
-.habit-status{font-size:9px}
-.task-item{padding:10px;gap:8px}
-.task-title{font-size:12.5px}
-.task-meta{font-size:9.5px}
-.task-cat{font-size:8.5px;padding:2px 6px}
-.sheet{padding:18px 14px calc(18px + env(safe-area-inset-bottom));border-radius:20px 20px 0 0}
-.sheet h3{font-size:14px}
-.form-row input,.form-row select{padding:10px 11px;font-size:12.5px}
-.date-input{padding:10px 12px;font-size:12.5px}
-.add-btn{padding:9px 15px;font-size:17px}
-.fab{width:50px;height:50px;font-size:24px;bottom:16px;left:16px;border-radius:16px}
-.alarm-bell{font-size:48px}
-.alarm-box h2{font-size:16px}
+  body{padding:12px}
+  .main-grid{grid-template-columns:1fr;grid-template-areas:"banner" "tasks" "calendar" "habits" "reminders";gap:12px}
+  .banner{padding:14px;border-radius:18px}
+  .banner h2{font-size:13px;margin-bottom:10px}
+  .banner-content{gap:10px}
+  .donut-wrap{width:72px;height:72px}
+  .donut-num{font-size:13px}
+  .bs-item{padding:6px 3px;border-radius:10px}
+  .bs-num{font-size:14px}
+  .bs-lbl{font-size:8.5px}
+  .card{padding:12px;border-radius:16px}
+  .card-title{font-size:13px}
+  .calendar-grid .day{font-size:11px}
+  .habits-grid{gap:6px}
+  .habit{padding:10px 4px;border-radius:12px}
+  .habit-icon{font-size:20px}
+  .habit-name{font-size:10.5px}
+  .task-item{padding:10px;gap:8px}
+  .task-title{font-size:12.5px}
+  .task-meta{font-size:9.5px}
+  .task-cat{font-size:8.5px;padding:2px 6px}
+  .sheet{padding:18px 14px calc(18px + env(safe-area-inset-bottom));border-radius:20px 20px 0 0}
+  .sheet h3{font-size:14px}
+  .form-row input,.form-row select,.date-input{padding:10px 11px;font-size:12.5px}
+  .add-btn{padding:9px 15px;font-size:17px}
+  .alarm-bell{font-size:48px}
+  .alarm-box h2{font-size:16px}
 }
 @media (max-width:380px){
-.app{padding:10px}
-.avatar{width:38px;height:38px;min-width:38px;font-size:16px}
-.user-name{font-size:13px}
-.user-date{font-size:10px}
-.icon-btn{width:34px;height:34px;font-size:14px;border-radius:10px}
-.stat-box .num{font-size:14px}
-.stat-box .lbl{font-size:8.5px}
-.habit-icon{font-size:18px}
-.habit-name{font-size:10px}
-.calendar-grid .day{font-size:10px;padding:4px 0}
-.task-title{font-size:12px}
+  body{padding:10px}
+  .avatar{width:38px;height:38px;min-width:38px;font-size:16px}
+  .user-name{font-size:13px}
+  .user-date{font-size:10px}
+  .icon-btn{width:34px;height:34px;font-size:14px;border-radius:10px}
+  .donut-wrap{width:64px;height:64px}
+  .donut-num{font-size:12px}
+  .bs-num{font-size:12px}
+  .bs-lbl{font-size:8px}
+  .stat-box .num{font-size:14px}
+  .calendar-grid .day{font-size:10px}
+  .habit-icon{font-size:18px}
+  .habit-name{font-size:10px}
+  .task-title{font-size:12px}
 }
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:5px}
@@ -178,96 +255,115 @@ header{display:flex;justify-content:space-between;align-items:center;margin-bott
 </head>
 <body>
 
-<div class="app">
-  <header>
-    <div class="user-info">
-      <div class="avatar">👩‍💻</div>
-      <div>
-        <div class="user-name">سلام، مریم!</div>
-        <div class="user-date" id="todayDate">در حال بارگذاری...</div>
-      </div>
+<header>
+  <div class="user-info">
+    <div class="avatar">👩‍💻</div>
+    <div>
+      <div class="user-name">سلام، مریم!</div>
+      <div class="user-date" id="todayDate">در حال بارگذاری...</div>
     </div>
-    <div class="header-actions">
-      <button class="icon-btn" id="btnTheme" title="تغییر تم">🎨</button>
-      <button class="icon-btn" id="btnSettings" title="تنظیمات">⚙️</button>
-    </div>
-  </header>
+  </div>
+  <div class="header-actions">
+    <button class="icon-btn" id="btnDark" title="حالت شبانه">🌙</button>
+    <button class="icon-btn" id="btnSettings" title="تنظیمات">⚙️</button>
+  </div>
+</header>
 
-  <div class="banner">
-    <h2>🌸 سلام! آماده‌ای؟</h2>
-    <div class="stats-grid">
-      <div class="stat-box"><span class="num" id="statTotal">0</span><span class="lbl">کل کارها</span></div>
-      <div class="stat-box"><span class="num" id="statDone">0</span><span class="lbl">انجام‌شده</span></div>
-      <div class="stat-box"><span class="num" id="statPercent">0%</span><span class="lbl">درصد موفقیت</span></div>
-      <div class="stat-box"><span class="num" id="statToday">0</span><span class="lbl">امروز</span></div>
+<div class="main-grid">
+  <!-- بنر -->
+  <div class="area-banner">
+    <div class="banner">
+      <h2>🌸 سلام! آماده‌ای؟</h2>
+      <div class="banner-content">
+        <div class="donut-wrap">
+          <svg class="donut" viewBox="0 0 100 100">
+            <circle class="donut-bg" cx="50" cy="50" r="40"/>
+            <circle class="donut-fg" cx="50" cy="50" r="40" id="donutProgress"/>
+          </svg>
+          <div class="donut-label"><div class="donut-num" id="donutNum">۰٪</div></div>
+        </div>
+        <div class="banner-stats">
+          <div class="bs-item"><span class="bs-num" id="statTotal">۰</span><span class="bs-lbl">کل</span></div>
+          <div class="bs-item"><span class="bs-num" id="statDone">۰</span><span class="bs-lbl">انجام</span></div>
+          <div class="bs-item"><span class="bs-num" id="statToday">۰</span><span class="bs-lbl">امروز</span></div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="main-grid">
-    <div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">📅 تقویم من</div>
-          <span style="font-size:11px;color:var(--text-muted)" id="calMonth">...</span>
-        </div>
-        <div class="calendar-grid" id="calendar"></div>
+  <!-- تقویم -->
+  <div class="area-calendar">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">📅 تقویم من</div>
+        <span style="font-size:11px;color:var(--text-muted)" id="calMonth">...</span>
       </div>
-      <div class="card">
-        <div class="card-header"><div class="card-title">🎯 عادت‌های روزانه</div></div>
-        <div class="habits-grid" id="habitsGrid"></div>
-      </div>
-      <div class="card">
-        <div class="card-header"><div class="card-title">🔔 یادآورها</div></div>
-        <div id="remindersList"></div>
-      </div>
+      <div class="calendar-grid" id="calendar"></div>
     </div>
-    <div>
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">📝 کارهای من</div>
-          <button class="chip" id="btnClearDone" style="font-size:11px">حذف انجام‌شده‌ها</button>
-        </div>
-        <div class="task-form">
-          <div class="form-row">
-            <input type="text" id="taskInput" placeholder="کار جدید...">
-            <button class="add-btn" id="btnAddTask">+</button>
-          </div>
-          <div class="form-row">
-            <select id="taskCategory">
-              <option value="کار">💼 کار</option>
-              <option value="شخصی">🏠 شخصی</option>
-              <option value="تحصیل">📚 تحصیل</option>
-              <option value="خرید">🛒 خرید</option>
-              <option value="متفرقه">📌 متفرقه</option>
-            </select>
-            <select id="taskPriority">
-              <option value="high">🔴 بالا</option>
-              <option value="normal" selected>🔵 معمولی</option>
-              <option value="low">🟢 پایین</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <div class="date-input" id="taskDueDisplay" tabindex="0">
-              <span>📅</span><span class="placeholder" id="taskDueText">تاریخ و ساعت</span>
-            </div>
-          </div>
-        </div>
-        <div class="filter-chips" id="filterChips">
-          <button class="chip active" data-cat="all">همه</button>
-          <button class="chip" data-cat="کار">💼 کار</button>
-          <button class="chip" data-cat="شخصی">🏠 شخصی</button>
-          <button class="chip" data-cat="تحصیل">📚 تحصیل</button>
-          <button class="chip" data-cat="خرید">🛒 خرید</button>
-          <button class="chip" data-cat="متفرقه">📌 متفرقه</button>
-        </div>
-        <div class="task-list" id="taskList"></div>
+  </div>
+
+  <!-- عادت‌ها -->
+  <div class="area-habits">
+    <div class="card">
+      <div class="card-header"><div class="card-title">🎯 عادت‌های روزانه</div></div>
+      <div class="habits-grid" id="habitsGrid"></div>
+    </div>
+  </div>
+
+  <!-- یادآورها -->
+  <div class="area-reminders">
+    <div class="card">
+      <div class="card-header"><div class="card-title">🔔 یادآورها</div></div>
+      <div id="remindersList"></div>
+    </div>
+  </div>
+
+  <!-- کارها -->
+  <div class="area-tasks">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">📝 کارهای من</div>
+        <button class="chip" id="btnClearDone" style="font-size:11px">حذف انجام‌شده‌ها</button>
       </div>
+      <div class="task-form">
+        <div class="form-row">
+          <input type="text" id="taskInput" placeholder="کار جدید...">
+          <button class="add-btn" id="btnAddTask">+</button>
+        </div>
+        <div class="form-row">
+          <select id="taskCategory">
+            <option value="کار">💼 کار</option>
+            <option value="شخصی">🏠 شخصی</option>
+            <option value="تحصیل">📚 تحصیل</option>
+            <option value="خرید">🛒 خرید</option>
+            <option value="متفرقه">📌 متفرقه</option>
+          </select>
+          <select id="taskPriority">
+            <option value="high">🔴 بالا</option>
+            <option value="normal" selected>🔵 معمولی</option>
+            <option value="low">🟢 پایین</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="date-input" id="taskDueDisplay" tabindex="0">
+            <span>📅</span><span class="placeholder" id="taskDueText">تاریخ و ساعت</span>
+          </div>
+        </div>
+      </div>
+      <div class="filter-chips" id="filterChips">
+        <button class="chip active" data-cat="all">همه</button>
+        <button class="chip" data-cat="کار">💼 کار</button>
+        <button class="chip" data-cat="شخصی">🏠 شخصی</button>
+        <button class="chip" data-cat="تحصیل">📚 تحصیل</button>
+        <button class="chip" data-cat="خرید">🛒 خرید</button>
+        <button class="chip" data-cat="متفرقه">📌 متفرقه</button>
+      </div>
+      <div class="task-list" id="taskList"></div>
     </div>
   </div>
 </div>
 
-<button class="fab" id="fab">+</button>
-
+<!-- ===== انتخابگر تاریخ شمسی ===== -->
 <div class="modal" id="pickerModal">
   <div class="sheet">
     <h3>📅 انتخاب تاریخ و ساعت</h3>
@@ -289,9 +385,17 @@ header{display:flex;justify-content:space-between;align-items:center;margin-bott
   </div>
 </div>
 
+<!-- ===== تنظیمات ===== -->
 <div class="modal" id="settingsModal">
   <div class="sheet">
     <h3>⚙️ تنظیمات</h3>
+
+    <label>حالت نمایش</label>
+    <div class="mode-toggle">
+      <button class="mode-btn active" data-mode="light">☀️ روز</button>
+      <button class="mode-btn" data-mode="dark">🌙 شب</button>
+    </div>
+
     <label>انتخاب تم رنگی</label>
     <div class="theme-picker" id="themePicker">
       <div class="theme-dot active" data-theme="pink" style="background:linear-gradient(135deg,#ec4899,#a855f7)"></div>
@@ -300,14 +404,18 @@ header{display:flex;justify-content:space-between;align-items:center;margin-bott
       <div class="theme-dot" data-theme="colorful" style="background:linear-gradient(135deg,#ec4899,#8b5cf6,#3b82f6)"></div>
       <div class="theme-dot" data-theme="orange" style="background:linear-gradient(135deg,#f97316,#ef4444)"></div>
     </div>
+
     <label>زنگ آلارم</label>
     <div class="sound-option active" data-sound="beep"><span>🔔</span><span>بوق کلاسیک</span></div>
     <div class="sound-option" data-sound="chime"><span>🎵</span><span>زنگ ملایم</span></div>
     <div class="sound-option" data-sound="siren"><span>🚨</span><span>آژیر هشدار</span></div>
+
     <label>حجم صدا</label>
     <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.1" value="0.8">
+
     <label>اعلان‌ها</label>
     <button class="btn btn-ghost" id="btnPerm" style="width:100%">🔔 فعال‌سازی اعلان</button>
+
     <div class="btn-row">
       <button class="btn btn-ghost" id="btnTestAlarm">🔊 تست صدا</button>
       <button class="btn btn-primary" id="btnCloseSettings">بستن</button>
@@ -315,6 +423,7 @@ header{display:flex;justify-content:space-between;align-items:center;margin-bott
   </div>
 </div>
 
+<!-- ===== ویرایش تسک ===== -->
 <div class="modal" id="editModal">
   <div class="sheet">
     <h3>✏️ ویرایش کار</h3>
@@ -352,6 +461,7 @@ header{display:flex;justify-content:space-between;align-items:center;margin-bott
   </div>
 </div>
 
+<!-- ===== آلارم ===== -->
 <div class="alarm-overlay" id="alarmOverlay">
   <div class="alarm-box">
     <div class="alarm-bell">🔔</div>
@@ -367,6 +477,7 @@ header{display:flex;justify-content:space-between;align-items:center;margin-bott
 <div class="toast" id="toast"></div>
 
 <script>
+/* ===== تبدیل تاریخ شمسی ===== */
 function div(a,b){return ~~(a/b)}
 function mod(a,b){return a-~~(a/b)*b}
 function jalCal(jy){
@@ -383,50 +494,49 @@ function jalCal(jy){
   let leap=mod(mod(nn+1,33)-1,4);if(leap===-1)leap=4;
   return{leap,gy,march}
 }
-function g2d(gy,gm,gd){
-  let d=div((gy+div(gm-8,6)+100100)*1461,4)+div(153*mod(gm+9,12)+2,5)+gd-34840408;
-  d=d-div(div(gy+100100+div(gm-8,6),100)*3,4)+752;return d;
-}
-function d2g(jdn){
-  let j=4*jdn+139361631;j=j+div(div(4*jdn+183187720,146097)*3,4)*4-3908;
-  const i=div(mod(j,1461),4)*5+308;const gd=div(mod(i,153),5)+1;const gm=mod(div(i,153),12)+1;const gy=div(j,1461)-100100+div(8-gm,6);
-  return{gy,gm,gd}
-}
+function g2d(gy,gm,gd){let d=div((gy+div(gm-8,6)+100100)*1461,4)+div(153*mod(gm+9,12)+2,5)+gd-34840408;d=d-div(div(gy+100100+div(gm-8,6),100)*3,4)+752;return d}
+function d2g(jdn){let j=4*jdn+139361631;j=j+div(div(4*jdn+183187720,146097)*3,4)*4-3908;const i=div(mod(j,1461),4)*5+308;const gd=div(mod(i,153),5)+1;const gm=mod(div(i,153),12)+1;const gy=div(j,1461)-100100+div(8-gm,6);return{gy,gm,gd}}
 function j2d(jy,jm,jd){const r=jalCal(jy);return g2d(r.gy,3,r.march)+(jm-1)*31-div(jm,7)*(jm-7)+jd-1}
-function d2j(jdn){
-  const gy=d2g(jdn).gy;let jy=gy-621;const r=jalCal(jy);const jdn1f=g2d(gy,3,r.march);let k=jdn-jdn1f,jm,jd;
-  if(k>=0){if(k<=185){jm=1+div(k,31);jd=mod(k,31)+1;return{jy,jm,jd}}else{k-=186}}else{jy-=1;k+=179;if(r.leap===1)k+=1}
-  jm=7+div(k,30);jd=mod(k,30)+1;return{jy,jm,jd}
-}
+function d2j(jdn){const gy=d2g(jdn).gy;let jy=gy-621;const r=jalCal(jy);const jdn1f=g2d(gy,3,r.march);let k=jdn-jdn1f,jm,jd;if(k>=0){if(k<=185){jm=1+div(k,31);jd=mod(k,31)+1;return{jy,jm,jd}}else{k-=186}}else{jy-=1;k+=179;if(r.leap===1)k+=1}jm=7+div(k,30);jd=mod(k,30)+1;return{jy,jm,jd}}
 function toJalali(date){const d=new Date(date);return d2j(g2d(d.getFullYear(),d.getMonth()+1,d.getDate()))}
 function toGregorian(jy,jm,jd){const g=d2g(j2d(jy,jm,jd));return new Date(g.gy,g.gm-1,g.gd)}
 function jalaliMonthDays(jy,jm){if(jm<=6)return 31;if(jm<=11)return 30;return jalCal(jy).leap===1?30:29}
 function jalaliMonthFirstWeekday(jy,jm){const g=toGregorian(jy,jm,1);return(g.getDay()+1)%7}
+
 const J_MONTHS=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
 const J_WEEK=['ش','ی','د','س','چ','پ','ج'];
+const J_WEEK_FULL=['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'];
 const FA_DIGITS=['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
 const toFa=n=>String(n).replace(/\d/g,d=>FA_DIGITS[d]);
 const pad=n=>String(n).padStart(2,'0');
+
 function fmtJalali(date,withTime=true){
   const d=new Date(date);const j=toJalali(d);
   const time=`${pad(d.getHours())}:${pad(d.getMinutes())}`;
   const dateStr=`${toFa(j.jd)} ${J_MONTHS[j.jm-1]} ${toFa(j.jy)}`;
   return withTime?`${dateStr} - ساعت ${toFa(time)}`:dateStr;
 }
+
+/* ===== اپ ===== */
 const $=s=>document.querySelector(s);
 const $$=s=>[...document.querySelectorAll(s)];
 const KEY='reminder_tasks_v2',SET='reminder_settings_v2',HAB='reminder_habits_v2';
-let tasks=[],settings={theme:'pink',alarmSound:'beep',alarmVolume:0.8};
+
+let tasks=[],settings={theme:'pink',mode:'light',alarmSound:'beep',alarmVolume:0.8};
 let habits=[
   {id:'h1',name:'مطالعه',icon:'📖',done:false,lastDate:null},
   {id:'h2',name:'ورزش',icon:'🏃',done:false,lastDate:null},
   {id:'h3',name:'درس',icon:'📚',done:false,lastDate:null},
 ];
 let currentFilter='all',editingId=null,alarmTask=null,swReg=null;
-let pickerTarget=null,pickerDate=null,pickerMode='new';
+let pickerDate=null,pickerMode='new';
+let pendingDue=null,editPendingDue=null;
+
 const uid=()=>Date.now()+'-'+Math.random().toString(36).slice(2);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._tm);t._tm=setTimeout(()=>t.classList.remove('show'),2400)}
+
 function load(){
   try{tasks=JSON.parse(localStorage.getItem(KEY))||[]}catch{tasks=[]}
   try{settings={...settings,...(JSON.parse(localStorage.getItem(SET))||{})}}catch{}
@@ -435,6 +545,8 @@ function load(){
 function save(){localStorage.setItem(KEY,JSON.stringify(tasks))}
 function saveSettings(){localStorage.setItem(SET,JSON.stringify(settings))}
 function saveHabits(){localStorage.setItem(HAB,JSON.stringify(habits))}
+
+/* ===== صدا ===== */
 let audioCtx=null;
 function playAlarmSound(){
   if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
@@ -444,6 +556,7 @@ function playAlarmSound(){
   else if(type==='chime'){const notes=[523.25,659.25,783.99,1046.50];notes.forEach((freq,i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sine';o.frequency.value=freq;o.connect(g);g.connect(audioCtx.destination);const start=now+i*0.3;g.gain.setValueAtTime(0,start);g.gain.linearRampToValueAtTime(vol*0.4,start+0.05);g.gain.exponentialRampToValueAtTime(0.001,start+1.2);o.start(start);o.stop(start+1.3)})}
   else if(type==='siren'){const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='sawtooth';o.connect(g);g.connect(audioCtx.destination);for(let i=0;i<4;i++){o.frequency.setValueAtTime(600,now+i*0.5);o.frequency.linearRampToValueAtTime(1200,now+i*0.5+0.25);o.frequency.linearRampToValueAtTime(600,now+i*0.5+0.5)}g.gain.setValueAtTime(vol*0.3,now);g.gain.setValueAtTime(vol*0.3,now+1.8);g.gain.linearRampToValueAtTime(0,now+2);o.start(now);o.stop(now+2)}
 }
+
 async function requestPermission(){
   if(!('Notification'in window)){toast('مرورگر پشتیبانی نمی‌کند');return false}
   if(Notification.permission==='granted'){toast('اعلان فعال است ✓');return true}
@@ -456,12 +569,17 @@ async function pushNotification(title,body,tag){
   try{const reg=swReg||(navigator.serviceWorker&&await navigator.serviceWorker.getRegistration());if(reg&&reg.showNotification){await reg.showNotification(title,{body,tag,dir:'rtl',lang:'fa',requireInteraction:true});return}}catch(e){}
   try{new Notification(title,{body,tag,dir:'rtl',lang:'fa'})}catch(e){}
 }
-function openPicker(target,mode){
-  pickerTarget=target;pickerMode=mode;
-  const now=new Date();
-  if(mode==='new'){pickerDate=new Date(now.getTime()+3600000);pickerDate.setMinutes(Math.ceil(pickerDate.getMinutes()/5)*5,0,0)}
-  else if(mode==='edit'){const t=tasks.find(x=>x.id===editingId);pickerDate=new Date(t.due)}
-  else{pickerDate=new Date(target)}
+
+/* ===== انتخابگر تاریخ ===== */
+function openPicker(mode){
+  pickerMode=mode;
+  if(mode==='new'){
+    if(pendingDue)pickerDate=new Date(pendingDue);
+    else{pickerDate=new Date(Date.now()+3600000);pickerDate.setMinutes(Math.ceil(pickerDate.getMinutes()/5)*5,0,0)}
+  } else if(mode==='edit'){
+    const t=tasks.find(x=>x.id===editingId);
+    pickerDate=t?new Date(t.due):new Date();
+  }
   renderPicker();
   $('#pickerModal').classList.add('open');
 }
@@ -479,32 +597,45 @@ function renderPicker(){
   const mins=[];for(let i=0;i<60;i+=5)mins.push(`<option value="${i}" ${i===pickerDate.getMinutes()?'selected':''}>${toFa(pad(i))}</option>`);
   $('#pickMinute').innerHTML=mins.join('');
 }
-$('#pickPrev').onclick=()=>{const j=toJalali(pickerDate);let jm=j.jm-1,jy=j.jy;if(jm<1){jm=12;jy--}pickerDate=toGregorian(jy,jm,1);pickerDate.setHours(new Date().getHours(),new Date().getMinutes());renderPicker()};
-$('#pickNext').onclick=()=>{const j=toJalali(pickerDate);let jm=j.jm+1,jy=j.jy;if(jm>12){jm=1;jy++}pickerDate=toGregorian(jy,jm,1);pickerDate.setHours(new Date().getHours(),new Date().getMinutes());renderPicker()};
-$('#pickDays').addEventListener('click',e=>{const d=e.target.closest('.pd[data-day]');if(!d)return;const j=toJalali(pickerDate);const day=+d.dataset.day;pickerDate=toGregorian(j.jy,j.jm,day);pickerDate.setHours(+$('#pickHour').value,+$('#pickMinute').value);renderPicker()});
+$('#pickPrev').onclick=()=>{const j=toJalali(pickerDate);let jm=j.jm-1,jy=j.jy;if(jm<1){jm=12;jy--}const nd=toGregorian(jy,jm,1);nd.setHours(pickerDate.getHours(),pickerDate.getMinutes());pickerDate=nd;renderPicker()};
+$('#pickNext').onclick=()=>{const j=toJalali(pickerDate);let jm=j.jm+1,jy=j.jy;if(jm>12){jm=1;jy++}const nd=toGregorian(jy,jm,1);nd.setHours(pickerDate.getHours(),pickerDate.getMinutes());pickerDate=nd;renderPicker()};
+$('#pickDays').addEventListener('click',e=>{const d=e.target.closest('.pd[data-day]');if(!d)return;const j=toJalali(pickerDate);const day=+d.dataset.day;const nd=toGregorian(j.jy,j.jm,day);nd.setHours(+$('#pickHour').value,+$('#pickMinute').value);pickerDate=nd;renderPicker()});
 $('#pickHour').onchange=e=>{pickerDate.setHours(+e.target.value);renderPicker()};
 $('#pickMinute').onchange=e=>{pickerDate.setMinutes(+e.target.value);renderPicker()};
-$('#pickCancel').onclick=()=>{$('#pickerModal').classList.remove('open');pickerTarget=null};
+$('#pickCancel').onclick=()=>{$('#pickerModal').classList.remove('open')};
 $('#pickConfirm').onclick=()=>{
-  if(!pickerTarget)return;
   pickerDate.setHours(+$('#pickHour').value,+$('#pickMinute').value);
-  if(pickerMode==='new'){pendingDue=pickerDate.toISOString();$('#taskDueText').textContent=fmtJalali(pickerDate);$('#taskDueText').classList.remove('placeholder')}
-  else if(pickerMode==='edit'){editPendingDue=pickerDate.toISOString();$('#editDueText').textContent=fmtJalali(pickerDate)}
+  if(pickerMode==='new'){
+    pendingDue=pickerDate.toISOString();
+    $('#taskDueText').textContent=fmtJalali(pickerDate);
+    $('#taskDueText').classList.remove('placeholder');
+  } else if(pickerMode==='edit'){
+    editPendingDue=pickerDate.toISOString();
+    $('#editDueText').textContent=fmtJalali(pickerDate);
+  }
   $('#pickerModal').classList.remove('open');
 };
 $('#pickerModal').addEventListener('click',e=>{if(e.target.id==='pickerModal')$('#pickerModal').classList.remove('open')});
-let pendingDue=null,editPendingDue=null;
-$('#taskDueDisplay').onclick=()=>openPicker(null,'new');
-$('#editDueDisplay').onclick=()=>openPicker(null,'edit');
+
+$('#taskDueDisplay').onclick=()=>openPicker('new');
+$('#editDueDisplay').onclick=()=>openPicker('edit');
+
+/* ===== رندر ===== */
 function render(){renderStats();renderTasks();renderHabits();renderCalendar();renderReminders()}
+
 function renderStats(){
   const total=tasks.length,done=tasks.filter(t=>t.done).length;
   const today=tasks.filter(t=>!t.done&&isSameJDay(new Date(t.due),new Date())).length;
   const percent=total?Math.round((done/total)*100):0;
-  $('#statTotal').textContent=toFa(total);$('#statDone').textContent=toFa(done);
-  $('#statPercent').textContent=toFa(percent)+'%';$('#statToday').textContent=toFa(today);
+  $('#statTotal').textContent=toFa(total);
+  $('#statDone').textContent=toFa(done);
+  $('#statToday').textContent=toFa(today);
+  $('#donutNum').textContent=toFa(percent)+'٪';
+  const circ=2*Math.PI*40;
+  $('#donutProgress').setAttribute('stroke-dasharray',`${(percent/100)*circ} ${circ}`);
 }
 function isSameJDay(a,b){const ja=toJalali(a),jb=toJalali(b);return ja.jy===jb.jy&&ja.jm===jb.jm&&ja.jd===jb.jd}
+
 function renderTasks(){
   let list=tasks.filter(t=>currentFilter==='all'||t.category===currentFilter);
   list.sort((a,b)=>new Date(a.due)-new Date(b.due));
@@ -527,26 +658,44 @@ function renderTasks(){
     </div>`
   }).join('');
 }
+
 function renderHabits(){
   const today=new Date().toDateString();
   habits.forEach(h=>{if(h.lastDate!==today&&h.done){h.done=false;h.lastDate=null}});
   $('#habitsGrid').innerHTML=habits.map(h=>`<div class="habit ${h.done?'done':''}" data-id="${h.id}"><div class="habit-icon">${h.icon}</div><div class="habit-name">${h.name}</div><div class="habit-status">${h.done?'✓ انجام شد':'انجام نشده'}</div></div>`).join('');
 }
+
 function renderCalendar(){
-  const now=new Date();const j=toJalali(now);
+  const now=new Date();
+  const j=toJalali(now);
   $('#calMonth').textContent=`${J_MONTHS[j.jm-1]} ${toFa(j.jy)}`;
   const days=jalaliMonthDays(j.jy,j.jm);
   const first=jalaliMonthFirstWeekday(j.jy,j.jm);
+
+  /* پیش‌محاسبه تعداد کارهای هر روز ماه جاری */
+  const counts={};
+  tasks.forEach(t=>{
+    const td=toJalali(t.due);
+    if(td.jy===j.jy&&td.jm===j.jm){counts[td.jd]=(counts[td.jd]||0)+1}
+  });
+
   let html=J_WEEK.map(d=>`<div class="day-name">${d}</div>`).join('');
   for(let i=0;i<first;i++)html+='<div class="day empty"></div>';
-  for(let d=1;d<=days;d++){const isToday=d===j.jd;html+=`<div class="day ${isToday?'today':''}">${toFa(d)}</div>`}
+  for(let d=1;d<=days;d++){
+    const isToday=d===j.jd;
+    const hasTasks=!!counts[d];
+    html+=`<div class="day ${isToday?'today':''} ${hasTasks?'has-tasks':''}" data-day="${d}">${toFa(d)}${hasTasks?'<span class="day-dot"></span>':''}</div>`;
+  }
   $('#calendar').innerHTML=html;
 }
+
 function renderReminders(){
   const upcoming=tasks.filter(t=>!t.done&&new Date(t.due)>new Date()).sort((a,b)=>new Date(a.due)-new Date(b.due)).slice(0,3);
   if(!upcoming.length){$('#remindersList').innerHTML='<div style="text-align:center;padding:20px;color:var(--text-muted);font-size:12px">یادآوری پیش‌رویی نداری</div>';return}
   $('#remindersList').innerHTML=upcoming.map(t=>`<div class="reminder-item"><div class="reminder-icon">🔔</div><div class="reminder-info"><div class="reminder-title">${esc(t.title)}</div><div class="reminder-time">${fmtJalali(t.due)}</div></div></div>`).join('');
 }
+
+/* ===== عملیات ===== */
 function addTask(){
   const title=$('#taskInput').value.trim();
   if(!title){toast('عنوان کار را وارد کن');return}
@@ -559,6 +708,8 @@ function addTask(){
 function toggleTask(id){const t=tasks.find(x=>x.id===id);if(!t)return;t.done=!t.done;if(t.done)t.doneAt=new Date().toISOString();save();render()}
 function deleteTask(id){tasks=tasks.filter(t=>t.id!==id);save();render();toast('حذف شد')}
 function toggleHabit(id){const h=habits.find(x=>x.id===id);if(!h)return;h.done=!h.done;h.lastDate=h.done?new Date().toDateString():null;saveHabits();render()}
+
+/* ===== بررسی یادآوری ===== */
 function checkReminders(){
   const now=Date.now();let changed=false;
   tasks.forEach(t=>{
@@ -578,9 +729,11 @@ function triggerAlarm(task){
     $('#alarmOverlay').classList.add('open');
   }
 }
+
+/* ===== رویدادها ===== */
 $('#btnAddTask').onclick=addTask;
 $('#taskInput').addEventListener('keypress',e=>{if(e.key==='Enter')addTask()});
-$('#fab').onclick=()=>{$('#taskInput').focus();window.scrollTo({top:0,behavior:'smooth'})};
+
 $('#taskList').addEventListener('click',e=>{
   const item=e.target.closest('.task-item');if(!item)return;const id=item.dataset.id;
   const act=e.target.closest('[data-act]')?.dataset.act;
@@ -591,14 +744,72 @@ $('#taskList').addEventListener('click',e=>{
 $('#habitsGrid').addEventListener('click',e=>{const h=e.target.closest('.habit');if(h)toggleHabit(h.dataset.id)});
 $('#filterChips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;currentFilter=b.dataset.cat;$$('#filterChips .chip').forEach(x=>x.classList.toggle('active',x===b));renderTasks()});
 $('#btnClearDone').onclick=()=>{const n=tasks.filter(t=>t.done).length;if(!n){toast('موردی نیست');return}if(confirm(`${n} کار انجام‌شده پاک شود؟`)){tasks=tasks.filter(t=>!t.done);save();render();toast('پاک شد')}};
-$('#btnSettings').onclick=()=>{$('#settingsModal').classList.add('open');if('Notification'in window){$('#btnPerm').textContent=Notification.permission==='granted'?'✅ اعلان فعال':'🔔 فعال‌سازی اعلان'}};
+
+/* ===== کلیک روی روز تقویم → تنظیم تاریخ کار جدید ===== */
+$('#calendar').addEventListener('click',e=>{
+  const d=e.target.closest('.day[data-day]');
+  if(!d)return;
+  const day=+d.dataset.day;
+  const j=toJalali(new Date());
+  const nd=toGregorian(j.jy,j.jm,day);
+  nd.setHours(9,0,0,0);
+  pendingDue=nd.toISOString();
+  $('#taskDueText').textContent=fmtJalali(nd);
+  $('#taskDueText').classList.remove('placeholder');
+  $('#taskInput').scrollIntoView({behavior:'smooth',block:'center'});
+  setTimeout(()=>{$('#taskInput').focus();toast('تاریخ تنظیم شد — عنوان کار را بنویس')},300);
+});
+
+/* ===== تنظیمات ===== */
+$('#btnSettings').onclick=()=>{
+  $('#settingsModal').classList.add('open');
+  if('Notification'in window){$('#btnPerm').textContent=Notification.permission==='granted'?'✅ اعلان فعال':'🔔 فعال‌سازی اعلان'}
+  $$('.mode-btn').forEach(x=>x.classList.toggle('active',x.dataset.mode===settings.mode));
+};
 $('#btnCloseSettings').onclick=()=>$('#settingsModal').classList.remove('open');
 $('#settingsModal').addEventListener('click',e=>{if(e.target.id==='settingsModal')$('#settingsModal').classList.remove('open')});
-$('#themePicker').addEventListener('click',e=>{const d=e.target.closest('.theme-dot');if(!d)return;settings.theme=d.dataset.theme;document.documentElement.setAttribute('data-theme',settings.theme);$$('#themePicker .theme-dot').forEach(x=>x.classList.toggle('active',x===d));saveSettings()});
-$('#settingsModal').addEventListener('click',e=>{const s=e.target.closest('.sound-option');if(s){settings.alarmSound=s.dataset.sound;$$('.sound-option').forEach(x=>x.classList.toggle('active',x===s));saveSettings();playAlarmSound()}});
+
+/* تغییر حالت شب/روز */
+$('#settingsModal').addEventListener('click',e=>{
+  const m=e.target.closest('.mode-btn');
+  if(m){
+    settings.mode=m.dataset.mode;
+    document.documentElement.setAttribute('data-mode',settings.mode);
+    $$('.mode-btn').forEach(x=>x.classList.toggle('active',x===m));
+    $('#btnDark').textContent=settings.mode==='dark'?'☀️':'🌙';
+    saveSettings();
+  }
+});
+
+/* دکمه سریع حالت شب در هدر */
+$('#btnDark').onclick=()=>{
+  settings.mode=settings.mode==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-mode',settings.mode);
+  $('#btnDark').textContent=settings.mode==='dark'?'☀️':'🌙';
+  $$('.mode-btn').forEach(x=>x.classList.toggle('active',x.dataset.mode===settings.mode));
+  saveSettings();
+  toast(settings.mode==='dark'?'حالت شبانه روشن شد 🌙':'حالت روز روشن شد ☀️');
+};
+
+/* تغییر تم رنگی */
+$('#themePicker').addEventListener('click',e=>{
+  const d=e.target.closest('.theme-dot');if(!d)return;
+  settings.theme=d.dataset.theme;
+  document.documentElement.setAttribute('data-theme',settings.theme);
+  $$('#themePicker .theme-dot').forEach(x=>x.classList.toggle('active',x===d));
+  saveSettings();
+});
+
+/* تغییر صدا */
+$('#settingsModal').addEventListener('click',e=>{
+  const s=e.target.closest('.sound-option');
+  if(s){settings.alarmSound=s.dataset.sound;$$('.sound-option').forEach(x=>x.classList.toggle('active',x===s));saveSettings();playAlarmSound()}
+});
 $('#volumeSlider').addEventListener('input',e=>{settings.alarmVolume=parseFloat(e.target.value);saveSettings()});
 $('#btnTestAlarm').onclick=()=>playAlarmSound();
 $('#btnPerm').onclick=async()=>{const ok=await requestPermission();if(ok)$('#btnPerm').textContent='✅ اعلان فعال'};
+
+/* ===== ویرایش ===== */
 function openEdit(id){
   const t=tasks.find(x=>x.id===id);if(!t)return;editingId=id;editPendingDue=t.due;
   $('#editTitle').value=t.title;$('#editNote').value=t.note||'';
@@ -617,16 +828,29 @@ $('#btnSaveEdit').onclick=()=>{
   save();render();$('#editModal').classList.remove('open');toast('ذخیره شد ✓');
 };
 $('#btnDeleteEdit').onclick=()=>{if(confirm('این کار حذف شود؟')){deleteTask(editingId);$('#editModal').classList.remove('open')}};
+
+/* ===== آلارم ===== */
 $('#alarmDone').onclick=()=>{if(alarmTask)toggleTask(alarmTask.id);$('#alarmOverlay').classList.remove('open');alarmTask=null};
 $('#alarmSnooze').onclick=()=>{if(alarmTask){alarmTask.due=new Date(Date.now()+10*60000).toISOString();alarmTask.notified=false;save();render();toast('۱۰ دقیقه دیگر یادآوری می‌شود')}$('#alarmOverlay').classList.remove('open');alarmTask=null};
+
+/* ===== راه‌اندازی ===== */
 async function init(){
-  load();document.documentElement.setAttribute('data-theme',settings.theme);
+  load();
+  document.documentElement.setAttribute('data-theme',settings.theme);
+  document.documentElement.setAttribute('data-mode',settings.mode);
+  $('#btnDark').textContent=settings.mode==='dark'?'☀️':'🌙';
   $$('#themePicker .theme-dot').forEach(x=>x.classList.toggle('active',x.dataset.theme===settings.theme));
+  $$('.mode-btn').forEach(x=>x.classList.toggle('active',x.dataset.mode===settings.mode));
   $$('.sound-option').forEach(x=>x.classList.toggle('active',x.dataset.sound===settings.alarmSound));
   $('#volumeSlider').value=settings.alarmVolume;
-  const now=new Date();const j=toJalali(now);
-  $('#todayDate').textContent=`${J_WEEK[(now.getDay()+1)%7]}‌شنبه ${toFa(j.jd)} ${J_MONTHS[j.jm-1]} ${toFa(j.jy)}`;
+
+  const now=new Date();
+  const j=toJalali(now);
+  const wd=J_WEEK_FULL[(now.getDay()+6)%7];
+  $('#todayDate').textContent=`${wd} ${toFa(j.jd)} ${J_MONTHS[j.jm-1]} ${toFa(j.jy)}`;
+
   render();
+
   if('serviceWorker'in navigator&&location.protocol!=='file:'){try{swReg=await navigator.serviceWorker.register('sw.js')}catch(e){}}
   setInterval(checkReminders,10000);checkReminders();
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){checkReminders();render()}});
