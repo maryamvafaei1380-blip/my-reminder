@@ -879,6 +879,39 @@ document.addEventListener('DOMContentLoaded',()=>{
     });
   }
 });
+// ... (کدهای قبلی شما در خطوط ۸۶۰ تا ۸۸۱) ...
+
+// ====== اینجا کد دکمه شروع را اضافه کنید ======
+const welcomeSubmitBtn = $('#welcomeSubmit');
+if (welcomeSubmitBtn) {
+    welcomeSubmitBtn.addEventListener('click', () => {
+        const input = $('#welcomeNameInput');
+        const name = input.value.trim();
+        
+        if (name) {
+            closeWelcomeModal(name);
+            toast('خوش آمدی ' + name + '! 🎉');
+        } else {
+            input.focus();
+            input.style.borderColor = 'var(--danger)';
+            setTimeout(() => {
+                input.style.borderColor = '';
+            }, 1000);
+            toast('لطفاً اسمت رو وارد کن');
+        }
+    });
+
+    $('#welcomeNameInput')?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            welcomeSubmitBtn.click();
+        }
+    });
+}
+// ====== پایان کد اضافه شده ======
+
+async function init(){
+    load();
+    // ... (بقیه کدهای شما) ...  
 async function init(){
   load();
   document.documentElement.setAttribute('data-theme',settings.theme);
