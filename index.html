@@ -221,7 +221,8 @@ body{padding:10px}
 
 <header>
   <div class="user-info">
-    <div class="avatar">👩‍💻</div>
+    <div class="avatar" id="userAvatar" title="تغییر عکس" style="cursor:pointer; overflow:hidden;">👩‍💻</div>
+<input type="file" id="avatarInput" accept="image/*" style="display:none;">
     <div>
      <div class="user-name" id="userName">سلام!</div>
       <div class="user-date" id="todayDate">در حال بارگذاری...</div>
@@ -887,6 +888,38 @@ document.addEventListener('DOMContentLoaded',()=>{
     });
   }
 });
+// ====== کد تغییر عکس پروفایل ======
+const avatarEl = $('#userAvatar');
+const avatarInput = $('#avatarInput');
+const AVATAR_KEY = 'reminder_avatar_v1';
+
+function loadAvatar() {
+    const savedAvatar = localStorage.getItem(AVATAR_KEY);
+    if (savedAvatar && avatarEl) {
+        avatarEl.innerHTML = `<img src="${savedAvatar}" style="width:100%; height:100%; object-fit:cover; border-radius:14px;">`;
+    }
+}
+
+if (avatarEl && avatarInput) {
+    avatarEl.addEventListener('click', () => {
+        avatarInput.click();
+    });
+
+    avatarInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const imageUrl = event.target.result;
+                avatarEl.innerHTML = `<img src="${imageUrl}" style="width:100%; height:100%; object-fit:cover; border-radius:14px;">`;
+                localStorage.setItem(AVATAR_KEY, imageUrl);
+                toast('عکس پروفایل تغییر کرد ✓');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+}
+// ====== پایان کد عکس پروفایل ======
 
 async function init(){
   load();
@@ -904,6 +937,7 @@ async function init(){
   $('#todayDate').textContent=`${wd} ${toFa(j.jd)} ${J_MONTHS[j.jm-1]} ${toFa(j.jy)}`;
   
   loadUserName();
+    loadAvatar();
   render();
 
   if('serviceWorker'in navigator&&location.protocol!=='file:'){try{swReg=await navigator.serviceWorker.register('sw.js')}catch(e){}}
